@@ -11,6 +11,7 @@ export default function Dashboard() {
   const [genderedUsers, setGenderedUsers] = useState(null);
 
   const userId = cookies.UserId;
+  console.log(userId);
 
   const getUser = async () => {
     try {
@@ -40,8 +41,13 @@ export default function Dashboard() {
   }, []);
 
   useEffect(() => {
-    getGenderedUsers();
+    if (user) {
+      getGenderedUsers();
+    }
   }, [user]);
+
+  console.log(user);
+  console.log(genderedUsers);
 
   const updateMatches = async (matchedUserId) => {
     try {
@@ -65,6 +71,13 @@ export default function Dashboard() {
   const outOfFrame = (name) => {
     console.log(name + ' left the screen!');
   };
+  // const matchedUserIds = user?.matches
+  //   .map(({ user_id }) => user_id)
+  //   .concat(userId);
+
+  // const filteredGenderedUsers = genderedUsers?.filter(
+  //   (genderedUser) => !matchedUserIds.includes(genderedUser.user_id)
+  // );
 
   return (
     <>
@@ -81,7 +94,9 @@ export default function Dashboard() {
                   onCardLeftScreen={() => outOfFrame(genderedUser.first_name)}
                 >
                   <div
-                    style={{ backgroundImage: 'url(' + genderedUser.url + ')' }}
+                    style={{
+                      backgroundImage: 'url(' + genderedUser.url + ')',
+                    }}
                     className="card"
                   >
                     <h3>{genderedUser.first_name}</h3>

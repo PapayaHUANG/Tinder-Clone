@@ -21,6 +21,7 @@ export default function Onboarding() {
   });
 
   let navigate = useNavigate();
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
