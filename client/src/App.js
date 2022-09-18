@@ -10,7 +10,7 @@ function App() {
   const authToken = cookies.AuthToken;
 
   return (
-    <BrowserRouter>
+    <BrowserRouter basename="/tinder-clone">
       <Routes>
         <Route path="/" element={<Home />} />
         {authToken && <Route path="dashboard" element={<Dashboard />} />}
