@@ -2,7 +2,7 @@ import TinderCard from 'react-tinder-card';
 import { useState, useEffect } from 'react';
 import { useCookies } from 'react-cookie';
 import ChatContainer from '../components/ChatContainer';
-import axios from 'axios';
+import { getOneUser, getGenderedUsers, updateMatches } from '../utils/crud';
 
 export default function Dashboard() {
   const [lastDirection, setLastDirection] = useState();
@@ -13,23 +13,18 @@ export default function Dashboard() {
   const userId = cookies.UserId;
   console.log(userId);
 
-  const getUser = async () => {
+  const getUser = async (id) => {
     try {
-      const response = await axios.get('http://localhost:8000/user', {
-        params: { userId },
-      });
-
+      const response = await getOneUser(id);
       setUser(response.data);
     } catch (error) {
       console.log(error);
     }
   };
 
-  const getGenderedUsers = async () => {
+  const fetchGenderedUsers = async (genderInterest) => {
     try {
-      const response = await axios.get('http://localhost:8000/gendered-users', {
-        params: { gender: user?.gender_interest },
-      });
+      const response = await getGenderedUsers(genderInterest);
       setGenderedUsers(response.data);
     } catch (error) {
       console.log(error);
@@ -37,25 +32,17 @@ export default function Dashboard() {
   };
 
   useEffect(() => {
-    getUser();
+    getUser(userId);
+    fetchGenderedUsers(user?.gender_interest);
   }, []);
-
-  useEffect(() => {
-    if (user) {
-      getGenderedUsers();
-    }
-  }, [user]);
 
   console.log(user);
   console.log(genderedUsers);
 
-  const updateMatches = async (matchedUserId) => {
+  const getUpdateMatches = async (id, matchedId) => {
     try {
-      await axios.put('http://localhost:8000/addmatch', {
-        userId,
-        matchedUserId,
-      });
-      getUser();
+      await updateMatches(id, matchedId);
+      getUser(id);
     } catch (error) {
       console.log(error);
     }
@@ -63,7 +50,7 @@ export default function Dashboard() {
 
   const swiped = (direction, swipedUserId) => {
     if (direction === 'right') {
-      updateMatches(swipedUserId);
+      getUpdateMatches(userId, swipedUserId);
     }
     setLastDirection(direction);
   };

@@ -1,7 +1,7 @@
 import { useState } from 'react';
-import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { useCookies } from 'react-cookie';
+import { createAccount, logIn } from '../utils/crud';
 
 export default function AuthModal({ setShowModal, isSignUp }) {
   const [email, setEmail] = useState(null);
@@ -17,33 +17,31 @@ export default function AuthModal({ setShowModal, isSignUp }) {
   };
   const handleSubmit = async (e) => {
     e.preventDefault();
-    try {
-      if (isSignUp && password !== confirmPassword) {
-        setError('Passwords need to match!');
-        return;
-      }
-      const response = await axios.post(
-        `http://localhost:8000/${isSignUp ? 'signup' : 'login'}`,
-        {
-          email,
-          password,
-        }
-      );
 
+    if (isSignUp && password !== confirmPassword) {
+      setError('Passwords need to match!');
+      return;
+    }
+
+    if (isSignUp) {
+      const response = await createAccount(email, password);
       setCookie('AuthToken', response.data.token);
       setCookie('UserId', response.data.userId);
-
       const success = response.status === 201;
-
       if (success && isSignUp) navigate('/onboarding');
       if (success && !isSignUp) navigate('/dashboard');
-
-      window.location.reload();
-
-      console.log('make a post request to our database');
-    } catch (error) {
-      console.log(error);
+    } else {
+      const response = await logIn(email, password);
+      setCookie('AuthToken', response.data.token);
+      setCookie('UserId', response.data.userId);
+      const success = response.status === 201;
+      if (success && isSignUp) navigate('/onboarding');
+      if (success && !isSignUp) navigate('/dashboard');
     }
+
+    window.location.reload();
+
+    console.log('make a post request to our database');
   };
 
   return (

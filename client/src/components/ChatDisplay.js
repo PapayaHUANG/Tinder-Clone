@@ -1,7 +1,7 @@
-import axios from 'axios';
 import Chat from './Chat';
 import ChatInput from './ChatInput';
 import { useState, useEffect } from 'react';
+import { getMessages } from '../utils/crud';
 
 export default function MatchesDisplay({ user, clickedUser }) {
   const userId = user?.user_id;
@@ -9,11 +9,9 @@ export default function MatchesDisplay({ user, clickedUser }) {
   const [usersMessages, setUsersMessages] = useState(null);
   const [clickedUsersMessages, setClickedUsersMessages] = useState(null);
   console.log(userId, clickedUserId);
-  const getUserMessages = async () => {
+  const getUserMessages = async (id, correspondingId) => {
     try {
-      const response = await axios.get('http://localhost:8000/messages', {
-        params: { userId: userId, correspondingUserId: clickedUserId },
-      });
+      const response = await getMessages(id, correspondingId);
 
       setUsersMessages(response.data);
     } catch (error) {
@@ -21,11 +19,9 @@ export default function MatchesDisplay({ user, clickedUser }) {
     }
   };
 
-  const getClickedUserMessages = async () => {
+  const getClickedUserMessages = async (id, correspondingId) => {
     try {
-      const response = await axios.get('http://localhost:8000/messages', {
-        params: { userId: clickedUserId, correspondingUserId: userId },
-      });
+      const response = await getMessages(id, correspondingId);
 
       setClickedUsersMessages(response.data);
     } catch (error) {
@@ -34,8 +30,8 @@ export default function MatchesDisplay({ user, clickedUser }) {
   };
 
   useEffect(() => {
-    getUserMessages();
-    getClickedUserMessages();
+    getUserMessages(userId, clickedUserId);
+    getClickedUserMessages(clickedUserId, userId);
   }, []);
 
   const messages = [];

@@ -1,5 +1,5 @@
-import axios from 'axios';
 import { useState } from 'react';
+import { addMessage } from '../utils/crud';
 
 export default function ChatInput({
   user,
@@ -12,7 +12,7 @@ export default function ChatInput({
   const userId = user?.user_id;
   const clickedUserId = clickedUser?.user_id;
 
-  const addMessage = async () => {
+  const fetchMessage = async () => {
     const message = {
       timestamp: new Date().toISOString(),
       from_userId: userId,
@@ -20,7 +20,7 @@ export default function ChatInput({
       message: textArea,
     };
     try {
-      await axios.post('http://localhost:8000/message', { message });
+      await addMessage(message);
       getUsersMessages();
       getClickedUserMessages();
       setTextArea('');
@@ -35,7 +35,7 @@ export default function ChatInput({
         value={textArea}
         onChange={(e) => setTextArea(e.target.value)}
       />
-      <button className="secondary-button" onClick={addMessage}>
+      <button className="secondary-button" onClick={fetchMessage}>
         Submit
       </button>
     </div>

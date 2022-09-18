@@ -1,15 +1,12 @@
-import axios from 'axios';
 import { useState, useEffect } from 'react';
-
+import { getManyUsers } from '../utils/crud';
 export default function MatchesDisplay({ matches, setClickedUser }) {
   const [matchedProfiles, setMatchedProfiles] = useState(null);
   const matchedUserId = matches.map(({ user_id }) => user_id);
 
-  const getMatches = async () => {
+  const getMatches = async (userIds) => {
     try {
-      const response = await axios.get('http://localhost:8000/users', {
-        params: { userIds: JSON.stringify(matchedUserId) },
-      });
+      const response = await getManyUsers(userIds);
       setMatchedProfiles(response.data);
     } catch (error) {
       console.log(error);
@@ -17,7 +14,7 @@ export default function MatchesDisplay({ matches, setClickedUser }) {
   };
 
   useEffect(() => {
-    getMatches();
+    getMatches(matchedUserId);
   }, []);
 
   console.log(matchedProfiles);

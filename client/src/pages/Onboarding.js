@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import Nav from '../components/Nav';
 import { useCookies } from 'react-cookie';
-import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { updateUser } from '../utils/crud';
 
 export default function Onboarding() {
   const [cookies, setCookie, removeCookie] = useCookies(['user']);
@@ -25,9 +25,7 @@ export default function Onboarding() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.put('http://localhost:8000/user', {
-        formData,
-      });
+      const response = await updateUser(formData);
       const success = response.status === 200;
       if (success) navigate('/dashboard');
     } catch (error) {
