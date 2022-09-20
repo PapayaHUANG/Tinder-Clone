@@ -20,6 +20,9 @@ export default function Onboarding() {
     matches: [],
   });
 
+  console.log(cookies);
+  console.log(formData);
+
   let navigate = useNavigate();
 
   const handleSubmit = async (e) => {
@@ -42,6 +45,7 @@ export default function Onboarding() {
       [name]: value,
     }));
   };
+  console.log(formData);
 
   return (
     <>

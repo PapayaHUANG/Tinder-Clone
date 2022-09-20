@@ -2,7 +2,12 @@ import TinderCard from 'react-tinder-card';
 import { useState, useEffect } from 'react';
 import { useCookies } from 'react-cookie';
 import ChatContainer from '../components/ChatContainer';
-import { getOneUser, getGenderedUsers, updateMatches } from '../utils/crud';
+import {
+  getOneUser,
+  getGenderedUsers,
+  getUsersWithoutMe,
+  updateMatches,
+} from '../utils/crud';
 
 export default function Dashboard() {
   const [lastDirection, setLastDirection] = useState();
@@ -31,12 +36,30 @@ export default function Dashboard() {
     }
   };
 
+  const fetchEveryOne = async (id) => {
+    try {
+      const response = await getUsersWithoutMe(id);
+      setGenderedUsers(response.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   useEffect(() => {
     getUser(userId);
-    fetchGenderedUsers(user?.gender_interest);
   }, []);
 
+  useEffect(() => {
+    if (user) {
+      if (user.gender_interest === 'everyone') {
+        fetchEveryOne(userId);
+      }
+      fetchGenderedUsers(user.gender_interest);
+    }
+  }, [user]);
+
   console.log(user);
+
   console.log(genderedUsers);
 
   const getUpdateMatches = async (id, matchedId) => {
@@ -51,6 +74,7 @@ export default function Dashboard() {
   const swiped = (direction, swipedUserId) => {
     if (direction === 'right') {
       getUpdateMatches(userId, swipedUserId);
+      console.log(userId, swipedUserId);
     }
     setLastDirection(direction);
   };

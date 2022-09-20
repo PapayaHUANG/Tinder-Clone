@@ -22,26 +22,28 @@ export default function AuthModal({ setShowModal, isSignUp }) {
       setError('Passwords need to match!');
       return;
     }
+    try {
+      if (isSignUp) {
+        const response = await createAccount(email, password);
 
-    if (isSignUp) {
-      const response = await createAccount(email, password);
-      setCookie('AuthToken', response.data.token);
-      setCookie('UserId', response.data.userId);
-      const success = response.status === 201;
-      if (success && isSignUp) navigate('/onboarding');
-      if (success && !isSignUp) navigate('/dashboard');
-    } else {
-      const response = await logIn(email, password);
-      setCookie('AuthToken', response.data.token);
-      setCookie('UserId', response.data.userId);
-      const success = response.status === 201;
-      if (success && isSignUp) navigate('/onboarding');
-      if (success && !isSignUp) navigate('/dashboard');
+        setCookie('AuthToken', response.data.token);
+        setCookie('UserId', response.data.userId);
+        const success = response.status === 201;
+        const failed = response.status === 409;
+        if (success && isSignUp) navigate('/onboarding');
+        if (success && !isSignUp) navigate('/dashboard');
+      } else {
+        const response = await logIn(email, password);
+        setCookie('AuthToken', response.data.token);
+        setCookie('UserId', response.data.userId);
+        const success = response.status === 201;
+        if (success && isSignUp) navigate('/onboarding');
+        if (success && !isSignUp) navigate('/dashboard');
+      }
+      window.location.reload();
+    } catch (error) {
+      setError('User Already Exist!');
     }
-
-    window.location.reload();
-
-    console.log('make a post request to our database');
   };
 
   return (
@@ -50,7 +52,7 @@ export default function AuthModal({ setShowModal, isSignUp }) {
         ✖
       </div>
       <h2>{isSignUp ? 'CREATE ACCOUNT' : 'LOG IN'}</h2>
-      <p>Polices in regards of clicking.</p>
+      <p>Policies in regards of clicking.</p>
       <form onSubmit={handleSubmit}>
         <input
           type="email"

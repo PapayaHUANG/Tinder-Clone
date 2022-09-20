@@ -20,10 +20,16 @@ const getUsersByGender = async (req, res) => {
   res.send(usersByGender);
 };
 
+const getEveryUserWithoutMe = async (req, res) => {
+  const id = req.query.userId;
+  const everyUser = await tinderService.getEveryUserWithoutMe(id);
+  res.send(everyUser);
+};
+
 const getMessages = async (req, res) => {
   const { userId, correspondingUserId } = req.query;
   const messages = await tinderService.getMessages(userId, correspondingUserId);
-  res.json(messages);
+  res.send(messages);
 };
 
 const createAccount = async (req, res) => {
@@ -38,7 +44,7 @@ const createAccount = async (req, res) => {
 
     const newUser = { email: sanitizedEmail, hashed_password: hashedPassword };
     const createAccount = await tinderService.createAccount(newUser);
-    console.log(createAccount);
+
     res.status(201).send(createAccount);
   }
 };
@@ -63,7 +69,8 @@ const addMessage = async (req, res) => {
 };
 
 const updateUser = async (req, res) => {
-  const formData = req.body.formData;
+  const formData = req.body.data;
+  console.log(formData);
   const updateUser = await tinderService.updateUser(formData);
   res.send(updateUser);
 };
@@ -82,6 +89,7 @@ module.exports = {
   getManyUsers,
 
   getUsersByGender,
+  getEveryUserWithoutMe,
   getMessages,
   createAccount,
   logIn,

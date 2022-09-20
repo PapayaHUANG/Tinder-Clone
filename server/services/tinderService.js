@@ -18,6 +18,11 @@ const getUsersByGender = async (gender) => {
   return users;
 };
 
+const getEveryUserWithoutMe = async (id) => {
+  const everyUsers = await User.getEveryUserWithoutMe(id);
+  return everyUsers;
+};
+
 const getMessages = async (userId, correspondingUserId) => {
   const messages = await Message.getMessages(userId, correspondingUserId);
   return messages;
@@ -71,7 +76,7 @@ const updateMatches = async (userId, matchedUserId) => {
 module.exports = {
   getOneUser,
   getManyUsers,
-
+  getEveryUserWithoutMe,
   getUsersByGender,
   getMessages,
   createAccount,

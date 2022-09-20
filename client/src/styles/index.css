@@ -85,10 +85,11 @@ nav .logo-container .logo {
   height: 100vh;
   position: fixed;
   background: linear-gradient(
-    to bottom,
-    rgba(10, 10, 10, 0.37) 0%,
-    rgba(0, 0, 0, 0.171) 100%
-  );
+      to bottom,
+      rgba(0, 0, 0, 0.65) 0%,
+      rgba(0, 0, 0, 0) 100%
+    ),
+    url('https://raw.githubusercontent.com/PapayaHUANG/images/main/img/tinderbackground.webp');
 }
 
 /* ------ Auth Modal ----- */

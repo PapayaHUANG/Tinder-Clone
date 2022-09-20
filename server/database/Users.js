@@ -61,6 +61,19 @@ const getUsersByGender = async (gender) => {
   }
 };
 
+const getEveryUserWithoutMe = async (id) => {
+  try {
+    await client.connect();
+    const users = await client.db('app-data').collection('users');
+    const query = { _id: { $ne: id } };
+    const foundUsers = await users.find(query).toArray();
+    return foundUsers;
+  } catch (error) {
+    console.error(error);
+  } finally {
+    await client.close();
+  }
+};
 const createAccount = async (newUser) => {
   try {
     await client.connect();
@@ -114,7 +127,7 @@ const addMatch = async (userId, updatedDocument) => {
 module.exports = {
   getManyUsers,
   getOneUser,
-
+  getEveryUserWithoutMe,
   getUsersByGender,
   createAccount,
   logIn,

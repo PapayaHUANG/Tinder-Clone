@@ -12,6 +12,8 @@ router.get('/users', tinderController.getManyUsers);
 
 router.get('/gendered-users', tinderController.getUsersByGender);
 
+router.get('/everyone', tinderController.getEveryUserWithoutMe);
+
 router.get('/messages', tinderController.getMessages);
 
 router.post('/signup', tinderController.createAccount);
