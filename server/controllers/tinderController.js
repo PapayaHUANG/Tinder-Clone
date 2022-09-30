@@ -9,6 +9,7 @@ const getOneUser = async (req, res) => {
 };
 
 const getManyUsers = async (req, res) => {
+  console.log(req.query);
   const userIds = JSON.parse(req.query.userIds);
   const users = await tinderService.getManyUsers(userIds);
   res.send(users);
@@ -16,13 +17,16 @@ const getManyUsers = async (req, res) => {
 
 const getUsersByGender = async (req, res) => {
   const gender = req.query.gender;
+
   const usersByGender = await tinderService.getUsersByGender(gender);
   res.send(usersByGender);
 };
 
 const getEveryUserWithoutMe = async (req, res) => {
   const id = req.query.userId;
+
   const everyUser = await tinderService.getEveryUserWithoutMe(id);
+
   res.send(everyUser);
 };
 

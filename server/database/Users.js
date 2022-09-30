@@ -65,7 +65,12 @@ const getEveryUserWithoutMe = async (id) => {
   try {
     await client.connect();
     const users = await client.db('app-data').collection('users');
-    const query = { _id: { $ne: id } };
+    const query = {
+      user_id: {
+        $ne: id,
+      },
+    };
+
     const foundUsers = await users.find(query).toArray();
     return foundUsers;
   } catch (error) {
