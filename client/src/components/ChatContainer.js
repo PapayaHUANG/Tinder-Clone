@@ -4,7 +4,7 @@ import ChatDisplay from './ChatDisplay';
 
 import { useState } from 'react';
 
-export default function ChatContainer({ user }) {
+export default function ChatContainer({ user, matches }) {
   const [clickedUser, setClickedUser] = useState(null);
   return (
     <div className="chat-container">
@@ -18,10 +18,7 @@ export default function ChatContainer({ user }) {
         </button>
       </div>
       {!clickedUser && (
-        <MatchesDisplay
-          matches={user.matches}
-          setClickedUser={setClickedUser}
-        />
+        <MatchesDisplay matches={matches} setClickedUser={setClickedUser} />
       )}
       {clickedUser && <ChatDisplay user={user} clickedUser={clickedUser} />}
     </div>

@@ -1,8 +1,9 @@
 import { useState, useEffect } from 'react';
 import { getManyUsers } from '../utils/crud';
+
 export default function MatchesDisplay({ matches, setClickedUser }) {
   const [matchedProfiles, setMatchedProfiles] = useState(null);
-  const matchedUserId = matches.map(({ user_id }) => user_id);
+  const matchedUserId = matches?.map(({ user_id }) => user_id);
 
   const getMatches = async (userIds) => {
     try {
@@ -14,10 +15,14 @@ export default function MatchesDisplay({ matches, setClickedUser }) {
   };
 
   useEffect(() => {
-    getMatches(matchedUserId);
-  }, []);
-
-  console.log(matchedProfiles);
+    let isMounted = true;
+    if (isMounted) {
+      getMatches(matchedUserId);
+    }
+    return () => {
+      isMounted = false;
+    };
+  }, [matches]);
 
   return (
     <div className="matches-display">

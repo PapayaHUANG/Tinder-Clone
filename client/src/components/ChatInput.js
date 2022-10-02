@@ -1,11 +1,11 @@
 import { useState } from 'react';
-import { addMessage } from '../utils/crud';
+import { addMessage, getMessages } from '../utils/crud';
 
 export default function ChatInput({
   user,
   clickedUser,
-  getUsersMessages,
-  getClickedUserMessages,
+  setUsersMessages,
+  setClickedUsersMessages,
 }) {
   const [textArea, setTextArea] = useState('');
 
@@ -21,8 +21,10 @@ export default function ChatInput({
     };
     try {
       await addMessage(message);
-      getUsersMessages();
-      getClickedUserMessages();
+      const userMessage = await getMessages(userId, clickedUserId);
+      setUsersMessages(userMessage.data);
+      const clickedUserMessage = await getMessages(clickedUserId, userId);
+      setClickedUsersMessages(clickedUserMessage.data);
       setTextArea('');
     } catch (error) {
       console.log(error);

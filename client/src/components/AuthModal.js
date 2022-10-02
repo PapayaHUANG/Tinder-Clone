@@ -29,7 +29,7 @@ export default function AuthModal({ setShowModal, isSignUp }) {
         setCookie('AuthToken', response.data.token);
         setCookie('UserId', response.data.userId);
         const success = response.status === 201;
-        const failed = response.status === 409;
+        const failed = response.status === 400;
         if (success && isSignUp) navigate('/onboarding');
         if (success && !isSignUp) navigate('/dashboard');
       } else {

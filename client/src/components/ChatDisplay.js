@@ -8,7 +8,7 @@ export default function MatchesDisplay({ user, clickedUser }) {
   const clickedUserId = clickedUser?.user_id;
   const [usersMessages, setUsersMessages] = useState(null);
   const [clickedUsersMessages, setClickedUsersMessages] = useState(null);
-  console.log(userId, clickedUserId);
+
   const getUserMessages = async (id, correspondingId) => {
     try {
       const response = await getMessages(id, correspondingId);
@@ -34,37 +34,19 @@ export default function MatchesDisplay({ user, clickedUser }) {
     getClickedUserMessages(clickedUserId, userId);
   }, []);
 
-  const messages = [];
-  usersMessages?.forEach((message) => {
-    const formattedMessage = {};
-    formattedMessage['name'] = user?.first_name;
-    formattedMessage['img'] = user?.url;
-    formattedMessage['message'] = message.message;
-    formattedMessage['timestamp'] = message.timestamp;
-    messages.push(formattedMessage);
-  });
-
-  clickedUsersMessages?.forEach((message) => {
-    const formattedMessage = {};
-    formattedMessage['name'] = clickedUser?.first_name;
-    formattedMessage['img'] = clickedUser?.url;
-    formattedMessage['message'] = message.message;
-    formattedMessage['timestamp'] = message.timestamp;
-    messages.push(formattedMessage);
-  });
-
-  const descendingOrderMessages = messages?.sort((a, b) =>
-    a.timestamp.localeCompare(b.timestamp)
-  );
-
   return (
     <>
-      <Chat descendingOrderMessages={descendingOrderMessages} />
+      <Chat
+        user={user}
+        clickedUser={clickedUser}
+        usersMessages={usersMessages}
+        clickedUsersMessages={clickedUsersMessages}
+      />
       <ChatInput
         user={user}
         clickedUser={clickedUser}
-        getUsersMessages={getClickedUserMessages}
-        getClickedUserMessages={getClickedUserMessages}
+        setUsersMessages={setClickedUsersMessages}
+        setClickedUsersMessages={setClickedUsersMessages}
       />
     </>
   );

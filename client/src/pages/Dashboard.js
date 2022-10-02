@@ -1,5 +1,5 @@
 import TinderCard from 'react-tinder-card';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { useCookies } from 'react-cookie';
 import ChatContainer from '../components/ChatContainer';
 import {
@@ -12,25 +12,35 @@ import {
 export default function Dashboard() {
   const [lastDirection, setLastDirection] = useState();
   const [user, setUser] = useState(null);
+  const [matches, setMatches] = useState(null);
   const [cookies, setCookie, removeCookie] = useCookies(['user']);
   const [genderedUsers, setGenderedUsers] = useState(null);
+  const isMounted = useRef(false);
 
   const userId = cookies.UserId;
-  console.log(userId);
 
   const getUser = async (id) => {
     try {
       const response = await getOneUser(id);
       setUser(response.data);
+      setMatches(response.data.matches);
     } catch (error) {
       console.log(error);
     }
   };
 
+  const matchedUserIds = user?.matches
+    .map(({ user_id }) => user_id)
+    .concat(userId);
+
   const fetchGenderedUsers = async (genderInterest) => {
     try {
       const response = await getGenderedUsers(genderInterest);
-      setGenderedUsers(response.data);
+      const users = response.data;
+      const filteredUsers = users?.filter(
+        (user) => !matchedUserIds.includes(user.user_id)
+      );
+      setGenderedUsers(filteredUsers);
     } catch (error) {
       console.log(error);
     }
@@ -39,62 +49,77 @@ export default function Dashboard() {
   const fetchEveryOne = async (id) => {
     try {
       const response = await getUsersWithoutMe(id);
-      setGenderedUsers(response.data);
+      const users = response.data;
+      const filteredUsers = await users?.filter(
+        (user) => !matchedUserIds.includes(user.user_id)
+      );
+      setGenderedUsers(filteredUsers);
     } catch (error) {
       console.log(error);
     }
   };
 
+  const swiped = async (direction, swipedUserId) => {
+    console.log(direction, swipedUserId);
+    if (direction === 'right') {
+      isMounted.current = true;
+      if (isMounted.current) {
+        await getUpdateMatches(user.user_id, swipedUserId);
+      }
+      return () => {
+        isMounted.current = false;
+      };
+    }
+    setLastDirection(direction);
+  };
+
   useEffect(() => {
-    getUser(userId);
+    isMounted.current = true;
+    if (isMounted.current) {
+      getUser(userId);
+    }
+    return () => {
+      isMounted.current = false;
+    };
   }, []);
 
   useEffect(() => {
-    if (user) {
-      if (user.gender_interest === 'everyone') {
-        fetchEveryOne(userId);
+    isMounted.current = true;
+    if (isMounted) {
+      if (user) {
+        if (user.gender_interest === 'everyone') {
+          fetchEveryOne(user?.user_id);
+        } else {
+          fetchGenderedUsers(user?.gender_interest);
+        }
       }
-      fetchGenderedUsers(user.gender_interest);
     }
+    return () => {
+      isMounted.current = false;
+    };
   }, [user]);
 
   console.log(user);
-
-  console.log(genderedUsers);
+  console.log(matches);
 
   const getUpdateMatches = async (id, matchedId) => {
     try {
       await updateMatches(id, matchedId);
-      getUser(id);
+      getUser(userId);
     } catch (error) {
       console.log(error);
     }
-  };
-
-  const swiped = (direction, swipedUserId) => {
-    if (direction === 'right') {
-      getUpdateMatches(userId, swipedUserId);
-      console.log(userId, swipedUserId);
-    }
-    setLastDirection(direction);
   };
 
   const outOfFrame = (name) => {
     console.log(name + ' left the screen!');
   };
-  // const matchedUserIds = user?.matches
-  //   .map(({ user_id }) => user_id)
-  //   .concat(userId);
-
-  // const filteredGenderedUsers = genderedUsers?.filter(
-  //   (genderedUser) => !matchedUserIds.includes(genderedUser.user_id)
-  // );
 
   return (
     <>
-      {user && (
+      {user && matches && (
         <div className="dashboard">
-          <ChatContainer user={user} />
+          <ChatContainer user={user} matches={matches} />
           <div className="swiper-container">
             <div className="card-container">
               {genderedUsers?.map((genderedUser) => (
