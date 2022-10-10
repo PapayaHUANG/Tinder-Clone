@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const URL = 'http://localhost:8000';
+const URL = 'https://tinder-clone.onrender.com/';
 
 export const getOneUser = (userId) =>
   axios.get(`${URL}/user`, { params: { userId } });
