@@ -10,13 +10,13 @@ function App() {
   const authToken = cookies.AuthToken;
 
   return (
-    <BrowserRouter basename="/Tinder-Clone">
+    <HashRouter>
       <Routes>
         <Route path="/" element={<Home />} />
         {authToken && <Route path="dashboard" element={<Dashboard />} />}
         {authToken && <Route path="onboarding" element={<Onboarding />} />}
       </Routes>
-    </BrowserRouter>
+    </HashRouter>
   );
 }
 
