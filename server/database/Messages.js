@@ -19,7 +19,7 @@ const getMessages = async (userId, correspondingUserId) => {
   } catch (error) {
     console.error(error);
   } finally {
-    await client.close();
+    // await client.close();
   }
 };
 
@@ -28,11 +28,12 @@ const addMessage = async (message) => {
     await client.connect();
     const messages = client.db('app-data').collection('messages');
     const insertedMessage = await messages.insertOne(message);
+
     return insertedMessage;
   } catch (error) {
     console.error(error);
   } finally {
-    await client.close();
+    // await client.close();
   }
 };
 
