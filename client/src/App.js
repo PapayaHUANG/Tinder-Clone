@@ -1,7 +1,7 @@
 import Home from './pages/Home';
 import Dashboard from './pages/Dashboard';
 import Onboarding from './pages/Onboarding';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { HashRouter, Routes, Route } from 'react-router-dom';
 import { useCookies } from 'react-cookie';
 
 function App() {
