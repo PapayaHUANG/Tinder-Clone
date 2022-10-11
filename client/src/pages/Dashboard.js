@@ -60,7 +60,6 @@ export default function Dashboard() {
   };
 
   const swiped = async (direction, swipedUserId) => {
-    console.log(direction, swipedUserId);
     if (direction === 'right') {
       isMounted.current = true;
       if (isMounted.current) {
@@ -99,8 +98,8 @@ export default function Dashboard() {
     };
   }, [user]);
 
-  console.log(user);
-  console.log(matches);
+  // console.log(user);
+  // console.log(matches);
 
   const getUpdateMatches = async (id, matchedId) => {
     try {

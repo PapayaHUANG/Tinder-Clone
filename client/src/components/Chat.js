@@ -6,36 +6,29 @@ export default function Chat({
   usersMessages,
   clickedUsersMessages,
 }) {
-  const [messages, setMessages] = useState([]);
-  const [descendingOrderMessages, setDescendingOrderMessages] = useState(null);
+  let messages = [];
 
-  useEffect(() => {
-    usersMessages?.forEach((message) => {
-      const formattedMessage = {};
-      formattedMessage['name'] = user?.first_name;
-      formattedMessage['img'] = user?.url;
-      formattedMessage['message'] = message.message;
-      formattedMessage['timestamp'] = message.timestamp;
-      setMessages([...messages, formattedMessage]);
-    });
+  usersMessages?.forEach((message) => {
+    const formattedMessage = {};
+    formattedMessage['name'] = user?.first_name;
+    formattedMessage['img'] = user?.url;
+    formattedMessage['message'] = message.message;
+    formattedMessage['timestamp'] = message.timestamp;
+    messages.push(formattedMessage);
+  });
 
-    clickedUsersMessages?.forEach((message) => {
-      const formattedMessage = {};
-      formattedMessage['name'] = clickedUser?.first_name;
-      formattedMessage['img'] = clickedUser?.url;
-      formattedMessage['message'] = message.message;
-      formattedMessage['timestamp'] = message.timestamp;
-      setMessages([...messages, formattedMessage]);
-    });
-  }, [usersMessages, clickedUsersMessages]);
+  clickedUsersMessages?.forEach((message) => {
+    const formattedMessage = {};
+    formattedMessage['name'] = clickedUser?.first_name;
+    formattedMessage['img'] = clickedUser?.url;
+    formattedMessage['message'] = message.message;
+    formattedMessage['timestamp'] = message.timestamp;
+    messages.push(formattedMessage);
+  });
 
-  useEffect(() => {
-    const orderedMessages = messages?.sort((a, b) =>
-      a.timestamp.localeCompare(b.timestamp)
-    );
-
-    setDescendingOrderMessages(orderedMessages);
-  }, [messages]);
+  const descendingOrderMessages = messages?.sort((a, b) =>
+    a.timestamp.localeCompare(b.timestamp)
+  );
 
   return (
     <div className="chat-display">
