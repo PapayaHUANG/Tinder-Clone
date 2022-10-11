@@ -4,7 +4,7 @@
 
 ### Origin
 
-This is full-stack practice inspired by Ania Kubow's [tutorial](https://www.youtube.com/watch?v=Q70IMS-Qnjk&t=3037s).
+This is full-stack practice inspired by **Ania Kubow's** [tutorial](https://www.youtube.com/watch?v=Q70IMS-Qnjk&t=3037s).
 Modifications were made based on module mindset. In the respect of frontend, I extract out the CRUD logic to make the code more clear. While in backend, I separated the code into route-controller-service-database logic.
 
 ### Overview
@@ -24,7 +24,10 @@ Account creating page
 ![Match and Profile display](https://raw.githubusercontent.com/PapayaHUANG/images/main/img/%E6%88%AA%E5%B1%8F2022-10-10%2021.44.02.png)
 Match and Profile display
 
-![Chat display](https://raw.githubusercontent.com/PapayaHUANG/images/main/img/%E6%88%AA%E5%B1%8F2022-10-10%2021.44.20.png)
+![Matched display](https://raw.githubusercontent.com/PapayaHUANG/images/main/img/%E6%88%AA%E5%B1%8F2022-10-10%2021.44.20.png)
+Matched display
+
+![Chat display](https://raw.githubusercontent.com/PapayaHUANG/images/main/img/%E6%88%AA%E5%B1%8F2022-10-11%2012.37.19.png)
 Chat display
 
 ### Technologies Used
@@ -39,7 +42,7 @@ Chat display
 
 - **JWT** for authentication.
 - **bcrypt** for password and user id encryption.
-- **Middleware** for transfer data into JSON format.
+- **Middleware** for transferring data into JSON format.
 
 3. Database
 
